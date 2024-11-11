@@ -1,0 +1,17 @@
+mi-alerta {
+    display: block;
+    background-color: antiquewhite;
+    color: red;
+    padding: 15px;
+    border: 1px solid #edcccd;
+    border-radius: 5px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+mi-alerta .btn-cerrar{
+    color: black;
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 10px;
+}
