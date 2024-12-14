@@ -95,7 +95,7 @@ class BookList extends HTMLElement {
                     <td>${book.titulo}</td> 
                     <td>${book.autor}</td>                    
                     <td>${book.editorial}</td> 
-                    <td>${book.nro_paginas}</td>                    
+                    <td>${book.nropaginas}</td>                    
                     <td>${book.stock}</td> 
                     <td>${book.estado ? "Disponible" : "No disponible"}</td> 
                     <td class = "actions">
@@ -113,9 +113,35 @@ class BookList extends HTMLElement {
         `;
 
         this.container.innerHTML = tableHtml;
+
+        this.container.querySelectorAll('.btn-eliminar').forEach(button => {
+            button.addEventListener('click', () => this.handleDelete(button.dataset.id));
+        });
     }
 
 
+    handleDelete = async (id) => {
+        const confirmDelete = confirm(`Esta seguro de eliminar el libro con el id ${id}`);
+
+        if (confirmDelete) {
+            try {
+                const response = await fetch(`http://localhost:5000/libros/${id}`, {
+                    method: 'DELETE'
+                });
+                if (response.ok) {
+                    alert('Libro eliminado exitosamente')
+                    //this.fetchData()
+                    const src = this.getAttribute('src');
+                    this.fetchData(src);
+                } else {
+                    alert('Error al emilinar el libro')
+                }
+            } catch (error) {
+                console.error(`Error al eliminar ${error}`);
+            }
+        }
+
+    }
 
 
 }

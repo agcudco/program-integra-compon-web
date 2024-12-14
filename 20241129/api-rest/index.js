@@ -24,9 +24,9 @@ const bd = mysql.createConnection(
     {
         host: 'localhost',
         user: 'root',
-        password: '',
+        password: 'geovanny**2205',
         port: 3306,
-        database: 'bd-pic'
+        database: 'bd_biblioteca'
     }
 );
 
@@ -54,18 +54,36 @@ app.get("/libros/", (req, res) => {
     });
 });
 
-app.post(/libros/, (req, res) => {
-    const { titulo, autor, editorial, nro_paginas, stock, estado } = req.body;
-    const query = 'INSERT INTO libros(titulo,autor,editorial,nro_paginas,stock,estado) VALUES (?,?,?,?,?,?)'
+app.post("/libros/", (req, res) => {
+    const { titulo, autor, editorial, nropaginas, stock, estado } = req.body;
+    const query = 'INSERT INTO libros(titulo,autor,editorial,nropaginas,stock,estado) VALUES (?,?,?,?,?,?)'
     bd.query(query,
-        [titulo, autor, editorial, nro_paginas, stock, estado],
-        (error,results) => {
-            if(error){
+        [titulo, autor, editorial, nropaginas, stock, estado],
+        (error, results) => {
+            if (error) {
                 res.status(500).json(`Error al insertar ${error}`);
                 return;
             }
             res.status(201).json(`Libro registrado con el ID: ${results.insertId}`);
             console.log(`Libro registrado con el ID: ${results.insertId}`)
+        }
+    );
+});
+
+app.delete("/libros/:id", (req, res) => {
+    const { id } = req.params;
+    const query = 'DELETE FROM libros WHERE id =?';
+    bd.query(query, [id],
+        (error, results) => {
+            if (error) {
+                res.status(500).send("Error al eliminar el libro");
+                return;
+            }
+            if (results.affectedRows === 0) {
+                res.status(404).send("Libro no encontrado");
+                return;
+            }
+            res.status(200).json('Libro eliminado exitosamente');
         }
     );
 });
